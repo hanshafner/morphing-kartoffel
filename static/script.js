@@ -6,29 +6,34 @@ document.addEventListener("DOMContentLoaded", function () {
     let lastRadius = generateRandomBorderRadius();
     updateBorderRadiusKeyframes(lastRadius, lastRadius);
 
-    let toggle = false;
+    // Initialize with initial colors
+    let colors1 = [generateRandomColor(), generateRandomColor()];
+    let colors2 = [generateRandomColor(), generateRandomColor()];
 
-    // Initialize gradients at start
-    gradient1.style.background = `linear-gradient(to right, ${generateRandomColor()}, ${generateRandomColor()})`;
-    gradient2.style.background = `linear-gradient(to right, ${generateRandomColor()}, ${generateRandomColor()})`;
+    gradient1.style.background = `linear-gradient(to right, ${colors1[0]}, ${colors1[1]})`;
+    gradient2.style.background = `linear-gradient(to right, ${colors2[0]}, ${colors2[1]})`;
+    gradient2.style.opacity = 0;  // Start with gradient2 invisible
+
+    let toggle = true;
 
     setInterval(() => {
         const nextRadius = generateRandomBorderRadius();
         updateBorderRadiusKeyframes(lastRadius, nextRadius);
         lastRadius = nextRadius;
 
+      // Prepare next set of colors based on the last set of the other gradient
         if (toggle) {
-            // Prepare next gradient in the background
-            gradient2.style.background = `linear-gradient(to right, ${generateRandomColor()}, ${generateRandomColor()})`;
-            // Smooth transition
-            gradient1.style.opacity = 1;
-            gradient2.style.opacity = 0;
-        } else {
-            // Prepare next gradient in the background
-            gradient1.style.background = `linear-gradient(to right, ${generateRandomColor()}, ${generateRandomColor()})`;
-            // Smooth transition
+            colors2 = [colors1[0], colors1[1]];  // Copy end colors from gradient1 to start for gradient2
+            colors2 = [generateRandomColor(), generateRandomColor()]; // Then generate new ending colors
+            gradient2.style.background = `linear-gradient(to right, ${colors2[0]}, ${colors2[1]})`;
             gradient1.style.opacity = 0;
             gradient2.style.opacity = 1;
+        } else {
+            colors1 = [colors2[0], colors2[1]]; // Copy end colors from gradient2 to start for gradient1
+            colors1 = [generateRandomColor(), generateRandomColor()]; // Then generate new ending colors
+            gradient1.style.background = `linear-gradient(to right, ${colors1[0]}, ${colors1[1]})`;
+            gradient1.style.opacity = 1;
+            gradient2.style.opacity = 0;
         }
         toggle = !toggle;
 
