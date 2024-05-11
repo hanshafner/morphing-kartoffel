@@ -3,6 +3,8 @@ version: '3.8'
 services:
   web:
     build: .
+    container_name: morphing-kartoffel
+    restart: unless-stopped
     ports:
       - "17777:5000"
     environment:
